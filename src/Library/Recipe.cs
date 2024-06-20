@@ -18,7 +18,13 @@ namespace Full_GRASP_And_SOLID
 
         // Creo una propiedad Cooked booleana de sólo lectura
         // Ésta propiedad me dirá si la receta ha sido terminada o no
-        private bool Cooked = false;
+        public bool Cooked { get; set; } = false;
+
+        // Creo el atributo del tipo TimerAdapter
+        private TimerAdapter timerClient;
+
+        // Creo el atributo que me va a guardar el timer
+        private CountdownTimer timer = new CountdownTimer();
 
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
@@ -85,15 +91,34 @@ namespace Full_GRASP_And_SOLID
             return tiempoTotal;
         }
 
+        // Creo el metodo StartCountdown para que comience el conteo
+        public void StartCountdown()
+        {
+            // Creo un nuevo adaptador para el timer
+            this.timerClient = new TimerAdapter(this);
+
+            // Registro el timer para que expire cuando la receta termine de cocinarse
+            // Ésto es, el tiempo de expiración que le voy a dar al timer va a ser el que se calcule en GetCookTime
+            this.timer.Register(this.GetCookTime(), this.timerClient);
+        }
+
+        // Creo el metodo void Cook
+        // Dentro de éste metodo voy a decirle al timer que empiece el conteo
+        public void Cook()
+        {
+            // Llamo al metodo StartCountdown para que comience la cuenta hacia atrás
+            this.StartCountdown();
+        }
+
         // Uso del patrón ADAPTER
-        // Creo una clase anidada TimeAdapter la cual implemente la interfaz TimerClient
-        private class TimeAdapter : TimerClient
+        // Creo una clase anidada TimerAdapter la cual implemente la interfaz TimerClient
+        private class TimerAdapter : TimerClient
         {
             // Hago que TimeAdapter conozca una instancia Recipe de acceso privado
             private Recipe Recipe;
 
             // Constructor de la clase anidada TimeAdapter
-            public TimeAdapter(Recipe recipe)
+            public TimerAdapter(Recipe recipe)
             {
                 this.Recipe = recipe;
             }
