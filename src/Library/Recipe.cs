@@ -16,6 +16,10 @@ namespace Full_GRASP_And_SOLID
 
         public Product FinalProduct { get; set; }
 
+        // Creo una propiedad Cooked booleana de sólo lectura
+        // Ésta propiedad me dirá si la receta ha sido terminada o no
+        private bool Cooked = false;
+
         // Agregado por Creator
         public void AddStep(Product input, double quantity, Equipment equipment, int time)
         {
@@ -79,6 +83,31 @@ namespace Full_GRASP_And_SOLID
 
             // Devuelvo el tiempo total de la receta
             return tiempoTotal;
+        }
+
+        // Uso del patrón ADAPTER
+        // Creo una clase anidada TimeAdapter la cual implemente la interfaz TimerClient
+        private class TimeAdapter : TimerClient
+        {
+            // Hago que TimeAdapter conozca una instancia Recipe de acceso privado
+            private Recipe Recipe;
+
+            // Constructor de la clase anidada TimeAdapter
+            public TimeAdapter(Recipe recipe)
+            {
+                this.Recipe = recipe;
+            }
+
+            // Implemento la propiedad de solo lectura TimeOutId
+            public object TimeOutId { get; }
+
+            // Implemento el metodo TimeOut definido en la interfaz TimerClient
+            // Éste método me va a decir que es lo que ocurre cuando el timer expira
+            public void TimeOut()
+            {
+                // Seteo la propiedad booleana Cooked en true
+                this.Recipe.Cooked = true;
+            }
         }
 
     }
