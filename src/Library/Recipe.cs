@@ -62,5 +62,24 @@ namespace Full_GRASP_And_SOLID
 
             return result;
         }
+
+        // Creo un método que me reotrne la suma del tiempo de cada uno de los pasos de una receta
+        public int GetCookTime()
+        {
+            // Genero la variable en donde voy a guardar el tiempo total de la receta
+            int tiempoTotal = 0;
+
+            // Itero para cada uno de los pasos en la lista de pasos de la receta (tipo BaseStep)
+            foreach (BaseStep step in this.steps)
+            {
+                // En caso que el paso sea normal,
+                // Actualizo la variable tiempoTotal con el tiempo del paso en donde estoy parado
+                tiempoTotal += step.Time;
+            }
+
+            // Devuelvo el tiempo total de la receta
+            return tiempoTotal;
+        }
+
     }
 }

@@ -31,6 +31,9 @@ namespace Full_GRASP_And_SOLID
             printer.PrintRecipe(recipe);
             printer = new FilePrinter();
             printer.PrintRecipe(recipe);
+
+            // Imprimo la suma del tiempo de todos los pasos
+            System.Console.WriteLine(recipe.GetCookTime());
         }
 
         private static void PopulateCatalogs()
